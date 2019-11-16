@@ -20,7 +20,7 @@ jobs:
       run: make test
     - name: Lint
       run: |
-        export PATH=$PATH:$(go env GOPATH)/bin # will be removed
+        export PATH=$PATH:$(go env GOPATH)/bin # remove when actions/setup-go does this
         make lint
       if: matrix.os != 'windows-latest'
     - name: Get metadata
