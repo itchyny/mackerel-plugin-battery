@@ -7,6 +7,17 @@ Battery plugin for Mackerel.
 command = "/path/to/mackerel-plugin-battery"
 ```
 
+## Installation
+### Homebrew
+```sh
+brew install itchyny/tap/mackerel-plugin-battery
+```
+
+### Build from source
+```bash
+go get -u github.com/itchyny/mackerel-plugin-battery
+```
+
 ## Bug Tracker
 Report bug at [Issues・itchyny/mackerel-plugin-battery - GitHub](https://github.com/itchyny/mackerel-plugin-battery/issues).
 
