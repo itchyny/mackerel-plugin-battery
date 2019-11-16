@@ -42,10 +42,6 @@ clean:
 	rm -rf $(BIN) goxz
 	go clean
 
-.PHONY: crossdocker
-crossdocker:
-	docker run --rm -v ${PWD}:"/$${PWD##*/}" -w "/$${PWD##*/}" golang make cross
-
 .PHONY: upload
 upload: $(GOBIN)/ghr
 	ghr "v$(VERSION)" goxz
