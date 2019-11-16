@@ -38,6 +38,7 @@ $(GOBIN)/golint:
 
 .PHONY: clean
 clean:
+	rm -rf $(BIN) goxz
 	go clean
 
 .PHONY: crossdocker
