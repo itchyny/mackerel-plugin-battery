@@ -29,6 +29,13 @@ func (p BatteryPlugin) GraphDefinition() map[string]mp.Graphs {
 				{Name: "current_per_max", Label: "Current per max capacity"},
 			},
 		},
+		"battery.voltage": {
+			Label: "Battery Voltage V",
+			Unit:  mp.UnitFloat,
+			Metrics: []mp.Metrics{
+				{Name: "current_voltage", Label: "Current voltage"},
+			},
+		},
 	}
 }
 
@@ -47,6 +54,7 @@ func (p BatteryPlugin) FetchMetrics() (map[string]float64, error) {
 		"max":             battery.Full / battery.Voltage,
 		"current":         battery.Current / battery.Voltage,
 		"current_per_max": battery.Current / battery.Full * 100,
+		"current_voltage": battery.Voltage,
 	}, nil
 }
 
