@@ -14,7 +14,7 @@ type BatteryPlugin struct{}
 func (p BatteryPlugin) GraphDefinition() map[string]mp.Graphs {
 	return map[string]mp.Graphs{
 		"battery.capacity": {
-			Label: "Battery Capacity mAh",
+			Label: "Battery Capacity / mAh",
 			Unit:  mp.UnitFloat,
 			Metrics: []mp.Metrics{
 				{Name: "design", Label: "Design capacity"},
@@ -23,14 +23,14 @@ func (p BatteryPlugin) GraphDefinition() map[string]mp.Graphs {
 			},
 		},
 		"battery.percentage": {
-			Label: "Battery Capacity %",
+			Label: "Battery Capacity / %",
 			Unit:  mp.UnitPercentage,
 			Metrics: []mp.Metrics{
 				{Name: "current_per_max", Label: "Current per max capacity"},
 			},
 		},
 		"battery.voltage": {
-			Label: "Battery Voltage V",
+			Label: "Battery Voltage / V",
 			Unit:  mp.UnitFloat,
 			Metrics: []mp.Metrics{
 				{Name: "current_voltage", Label: "Current voltage"},
