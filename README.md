@@ -1,6 +1,9 @@
 # mackerel-plugin-battery
 Battery plugin for Mackerel.
 
+## Screenshot
+<img alt="Graphs of mackerel-plugin-battery" src="https://user-images.githubusercontent.com/375258/69137719-a850e200-0b00-11ea-989c-4996349f5f97.png">
+
 ## Setting
 ```
 [plugin.metrics.battery]
