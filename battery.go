@@ -14,7 +14,7 @@ type BatteryPlugin struct{}
 func (p BatteryPlugin) GraphDefinition() map[string]mp.Graphs {
 	return map[string]mp.Graphs{
 		"battery.capacity": {
-			Label: "Battery Capacity mWh",
+			Label: "Battery Capacity mAh",
 			Unit:  mp.UnitFloat,
 			Metrics: []mp.Metrics{
 				{Name: "design", Label: "Design capacity"},
@@ -43,9 +43,9 @@ func (p BatteryPlugin) FetchMetrics() (map[string]float64, error) {
 	}
 	battery := batteries[0]
 	return map[string]float64{
-		"design":          battery.Design,
-		"max":             battery.Full,
-		"current":         battery.Current,
+		"design":          battery.Design / battery.Voltage,
+		"max":             battery.Full / battery.Voltage,
+		"current":         battery.Current / battery.Voltage,
 		"current_per_max": battery.Current / battery.Full * 100,
 	}, nil
 }
