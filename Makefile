@@ -4,7 +4,7 @@ GOBIN ?= $(shell go env GOPATH)/bin
 export GO111MODULE=on
 
 .PHONY: all
-all: clean build
+all: build
 
 .PHONY: build
 build:
