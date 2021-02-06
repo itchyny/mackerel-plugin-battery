@@ -18,7 +18,7 @@ brew install itchyny/tap/mackerel-plugin-battery
 
 ### Build from source
 ```bash
-go get -u github.com/itchyny/mackerel-plugin-battery
+go get github.com/itchyny/mackerel-plugin-battery
 ```
 
 ## Bug Tracker
