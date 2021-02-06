@@ -1,2 +1,5 @@
-/goxz
 /mackerel-plugin-battery
+/goxz
+*.exe
+*.test
+*.out
