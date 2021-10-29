@@ -19,7 +19,7 @@ show-version:
 
 .PHONY: cross
 cross: $(GOBIN)/goxz CREDITS
-	goxz -n $(BIN) -pv=v$(VERSION)
+	goxz -n $(BIN) -pv=v$(VERSION) -arch=amd64,arm64 .
 
 $(GOBIN)/goxz:
 	go install github.com/Songmu/goxz/cmd/goxz@latest
