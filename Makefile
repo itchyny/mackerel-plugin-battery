@@ -1,7 +1,6 @@
 BIN := mackerel-plugin-battery
 VERSION := $$(make -s show-version)
 GOBIN ?= $(shell go env GOPATH)/bin
-export GO111MODULE=on
 
 .PHONY: all
 all: build
