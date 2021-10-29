@@ -1,5 +1,6 @@
 BIN := mackerel-plugin-battery
 VERSION := $$(make -s show-version)
+GIT_DIFF := $$(git diff --name-only)
 GOBIN ?= $(shell go env GOPATH)/bin
 
 .PHONY: all
@@ -47,6 +48,26 @@ $(GOBIN)/staticcheck:
 clean:
 	rm -rf $(BIN) goxz CREDITS
 	go clean
+
+.PHONY: bump
+bump:
+ifneq ($(shell git status --porcelain),)
+	$(error git workspace is dirty)
+endif
+ifneq ($(shell git rev-parse --abbrev-ref HEAD),main)
+	$(error current branch is not main)
+endif
+	@printf "Bump up version in VERSION. Press Enter to proceed: "
+	@read -n1
+	@[ "$(GIT_DIFF)" == "VERSION" ] || { \
+		echo "Version is not updated or unrelated file is updated:"; \
+		[ -z "$(GIT_DIFF)" ] || printf "  %s\n" $(GIT_DIFF); \
+		exit 1; \
+	}
+	git commit -am "bump up version to $(VERSION)"
+	git tag "v$(VERSION)"
+	git push origin main
+	git push origin "refs/tags/v$(VERSION)"
 
 .PHONY: upload
 upload: $(GOBIN)/ghr
