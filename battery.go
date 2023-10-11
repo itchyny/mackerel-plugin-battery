@@ -2,6 +2,7 @@ package main
 
 import (
 	"errors"
+	"math"
 
 	"github.com/distatus/battery"
 	mp "github.com/mackerelio/go-mackerel-plugin"
@@ -41,21 +42,40 @@ func (p BatteryPlugin) GraphDefinition() map[string]mp.Graphs {
 
 // FetchMetrics returns the metrics.
 func (p BatteryPlugin) FetchMetrics() (map[string]float64, error) {
-	batteries, err := battery.GetAll()
-	if err != nil {
+	bat, err := battery.Get(0)
+
+	var errPartial battery.ErrPartial
+	if err != nil && !errors.As(err, &errPartial) {
 		return nil, err
 	}
-	if len(batteries) == 0 {
-		return nil, errors.New("battery not found")
+
+	if errPartial.Design != nil {
+		bat.Design = math.NaN()
 	}
-	battery := batteries[0]
-	return map[string]float64{
-		"design":          battery.Design / battery.Voltage,
-		"max":             battery.Full / battery.Voltage,
-		"current":         battery.Current / battery.Voltage,
-		"current_per_max": battery.Current / battery.Full * 100,
-		"current_voltage": battery.Voltage,
-	}, nil
+	if errPartial.Voltage != nil {
+		bat.Voltage = math.NaN()
+	}
+	if errPartial.Full != nil {
+		bat.Full = math.NaN()
+	}
+	if errPartial.Current != nil {
+		bat.Current = math.NaN()
+	}
+
+	metrics := map[string]float64{
+		"design":          bat.Design / bat.Voltage,
+		"max":             bat.Full / bat.Voltage,
+		"current":         bat.Current / bat.Voltage,
+		"current_per_max": bat.Current / bat.Full * 100,
+		"current_voltage": bat.Voltage,
+	}
+	for k, v := range metrics {
+		if math.IsNaN(v) {
+			delete(metrics, k)
+		}
+	}
+
+	return metrics, nil
 }
 
 func main() {
