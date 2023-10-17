@@ -1,6 +1,7 @@
 BIN := mackerel-plugin-battery
 VERSION := $$(make -s show-version)
 GIT_DIFF := $$(git diff --name-only)
+BUILD_LDFLAGS = "-s -w"
 GOBIN ?= $(shell go env GOPATH)/bin
 
 .PHONY: all
@@ -8,11 +9,11 @@ all: build
 
 .PHONY: build
 build:
-	go build -o $(BIN) .
+	go build -ldflags=$(BUILD_LDFLAGS) -o $(BIN) .
 
 .PHONY: install
 install:
-	go install ./...
+	go install -ldflags=$(BUILD_LDFLAGS) .
 
 .PHONY: show-version
 show-version:
@@ -20,7 +21,7 @@ show-version:
 
 .PHONY: cross
 cross: $(GOBIN)/goxz CREDITS
-	goxz -n $(BIN) -pv=v$(VERSION) -arch=amd64,arm64 .
+	goxz -n $(BIN) -pv=v$(VERSION) -build-ldflags=$(BUILD_LDFLAGS) .
 
 $(GOBIN)/goxz:
 	go install github.com/Songmu/goxz/cmd/goxz@latest
@@ -39,7 +40,7 @@ test: build
 .PHONY: lint
 lint: $(GOBIN)/staticcheck
 	go vet ./...
-	staticcheck ./...
+	staticcheck -checks all ./...
 
 $(GOBIN)/staticcheck:
 	go install honnef.co/go/tools/cmd/staticcheck@latest
@@ -51,12 +52,8 @@ clean:
 
 .PHONY: bump
 bump:
-ifneq ($(shell git status --porcelain),)
-	$(error git workspace is dirty)
-endif
-ifneq ($(shell git rev-parse --abbrev-ref HEAD),main)
-	$(error current branch is not main)
-endif
+	test -z "$$(git status --porcelain || echo .)"
+	test "$$(git branch --show-current)" = "main"
 	@printf "Bump up version in VERSION. Press Enter to proceed: "
 	@read -n1
 	@[ "$(GIT_DIFF)" == "VERSION" ] || { \
@@ -66,8 +63,7 @@ endif
 	}
 	git commit -am "bump up version to $(VERSION)"
 	git tag "v$(VERSION)"
-	git push origin main
-	git push origin "refs/tags/v$(VERSION)"
+	git push --atomic origin main tag "v$(VERSION)"
 
 .PHONY: upload
 upload: $(GOBIN)/ghr
