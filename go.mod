@@ -1,14 +1,15 @@
 module github.com/itchyny/mackerel-plugin-battery
 
-go 1.17
+go 1.20
 
 require (
-	github.com/distatus/battery v0.10.1-0.20210808230332-8457fe43ad5a
-	github.com/mackerelio/go-mackerel-plugin v0.1.2
+	github.com/distatus/battery v0.11.0
+	github.com/mackerelio/go-mackerel-plugin v0.1.4
 )
 
 require (
 	github.com/mackerelio/golib v1.2.1 // indirect
-	golang.org/x/sys v0.0.0-20211025201205-69cdffdb9359 // indirect
-	howett.net/plist v0.0.0-20201203080718-1454fab16a06 // indirect
+	golang.org/x/sys v0.13.0 // indirect
+	golang.org/x/text v0.13.0 // indirect
+	howett.net/plist v1.0.0 // indirect
 )
